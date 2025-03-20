@@ -43,6 +43,7 @@ func (app *application) registerUserHandler(w http.ResponseWriter, r *http.Reque
 	}
 
 	v := validator.New()
+
 	// Validate the user struct and return the error messages to the client if any of
 	// the checks fail.
 	if data.ValidateUser(v, user); !v.Valid() {
@@ -75,6 +76,7 @@ func (app *application) registerUserHandler(w http.ResponseWriter, r *http.Reque
 	}
 
 	app.background(func() {
+
 		// As there are now multiple pieces of data that we want to pass to our email
 		// templates, we create a map to act as a 'holding structure' for the data. This
 		// contains the plaintext version of the activation token for the user, along
