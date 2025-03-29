@@ -15,6 +15,7 @@ import (
 	"github.com/Temutjin2k/greenlight/internal/jsonlog"
 	"github.com/Temutjin2k/greenlight/internal/mailer"
 	_ "github.com/lib/pq"
+	"github.com/prometheus/client_golang/prometheus"
 )
 
 // Declare a string containing the application version number. Later in the book we'll
@@ -68,6 +69,13 @@ type application struct {
 	mailer mailer.Mailer
 	wg     sync.WaitGroup
 }
+
+// Prometheus
+var requestCounter = prometheus.NewCounter(
+	prometheus.CounterOpts{
+		Name: "http_requests_total",
+		Help: "Total number of HTTP requests",
+	})
 
 func main() {
 	var cfg config

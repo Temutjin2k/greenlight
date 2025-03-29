@@ -4,6 +4,8 @@ import (
 	"net/http"
 
 	"github.com/julienschmidt/httprouter"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 func (app *application) routes() http.Handler {
@@ -11,6 +13,12 @@ func (app *application) routes() http.Handler {
 
 	router.NotFound = http.HandlerFunc(app.notFoundResponse)
 	router.MethodNotAllowed = http.HandlerFunc(app.methodNotAllowedResponse)
+
+	// Prometheus
+	prometheus.MustRegister(requestCounter)
+
+	// Эндпоинт с метриками
+	router.Handler("GET", "/metrics", promhttp.Handler())
 
 	// Health check
 	router.HandlerFunc(http.MethodGet, "/v1/healthcheck", app.healthcheckHandler)
